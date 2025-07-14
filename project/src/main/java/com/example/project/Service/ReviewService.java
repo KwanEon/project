@@ -45,10 +45,13 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    public void updateReview(Long reviewId, String reviewText, int rating) {
+    public void updateReview(Long reviewId, Long userId, String reviewText, int rating) {
         Review review = reviewRepository.findById(reviewId)
             .orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
 
+        if (!review.getUser().getId().equals(userId)) {
+            throw new AccessDeniedException("본인이 작성한 리뷰만 수정할 수 있습니다.");
+        }
         if (rating < 1 || rating > 5) {
             throw new IllegalArgumentException("별점은 1에서 5 사이여야 합니다.");
         }

@@ -64,7 +64,7 @@ public class ProductController {
     public ResponseEntity<String> updateReview(@PathVariable("reviewId") Long reviewId,
                                                @RequestBody @Valid ReviewDTO reviewDTO,
                                                @AuthenticationPrincipal CustomUserDetails principal) {
-        reviewService.updateReview(reviewId, reviewDTO.getReviewText(), reviewDTO.getRating());
+        reviewService.updateReview(reviewId, principal.getUserId(), reviewDTO.getReviewText(), reviewDTO.getRating());
         return ResponseEntity.ok("리뷰 수정 성공");
     }
 
