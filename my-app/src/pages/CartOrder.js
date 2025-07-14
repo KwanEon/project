@@ -4,24 +4,21 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 function CartOrder() {
+  const { user, userRole, loading } = useContext(AuthContext);
   const [cartItems, setCartItems] = useState([]);
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
-  const { user, userRole, loading } = useContext(AuthContext);
   const navigate = useNavigate();
-  const hasAlerted = useRef(false); // 중복 방지용
+  const hasRedirected = useRef(false); // 중복 방지용
 
   useEffect(() => {
     if (loading) return;
 
-    if (!hasAlerted.current) {
-      hasAlerted.current = true;
-
+    if (!hasRedirected.current) {
+      hasRedirected.current = true;
       if (userRole === "ANONYMOUS") {
-        setTimeout(() => {
-          alert("로그인이 필요합니다.");
-          navigate("/login");
-        }, 1);
+        alert("로그인이 필요합니다.");
+        navigate("/login");
         return;
       }
 

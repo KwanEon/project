@@ -17,10 +17,8 @@ const MyPage = () => {
     if (!hasRedirected.current) {
       hasRedirected.current = true;
       if (userRole === "ANONYMOUS") {
-        setTimeout(() => {
-          alert("로그인이 필요합니다.");
-          navigate("/login", { replace: true });
-        }, 100);
+        alert("로그인이 필요합니다.");
+        navigate("/login", { replace: true });
         return;
       }
     }

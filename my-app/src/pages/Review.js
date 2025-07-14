@@ -4,24 +4,21 @@ import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
 function ReviewForm() {
-  const { user, userRole } = useContext(AuthContext);
+  const { userRole } = useContext(AuthContext);
   const { productId } = useParams();
   const navigate = useNavigate();
-  const hasAlerted = useRef(false);
+  const hasRedirected = useRef(false);
 
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!hasAlerted.current) {
-      hasAlerted.current = true;
-
+    if (!hasRedirected.current) {
+      hasRedirected.current = true;
       if (userRole === "ANONYMOUS") {
-        setTimeout(() => {
-          alert("로그인이 필요합니다.");
-          navigate("/login");
-        }, 1);
+        alert("로그인이 필요합니다.");
+        navigate("/login");
         return;
       }
 

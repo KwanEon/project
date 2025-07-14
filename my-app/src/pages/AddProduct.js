@@ -30,18 +30,13 @@ function AddProduct() {
 
     if (!hasRedirected.current) {
       hasRedirected.current = true;
-
       if (userRole === "ANONYMOUS") {
-        setTimeout(() => {
-          alert("로그인이 필요합니다.");
-          navigate("/login");
-        }, 1); 
+        alert("로그인이 필요합니다.");
+        navigate("/login");
         return;
       } else if (userRole !== "ROLE_ADMIN") {
-        setTimeout(() => {
-          alert("접근 권한이 없습니다.");
-          navigate("/products");
-        }, 1);
+        alert("접근 권한이 없습니다.");
+        navigate("/products");
         return;
       }
     }
