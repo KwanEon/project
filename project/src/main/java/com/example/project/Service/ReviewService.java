@@ -97,7 +97,7 @@ public class ReviewService {
             throw new AccessDeniedException("본인이 작성한 리뷰만 조회할 수 있습니다.");
         }
 
-        // ★ 반환용 DTO로 변환
+        // 반환용 DTO로 변환
         return ReviewDTO.builder()
                 .id(review.getId())
                 .reviewText(review.getReviewText())
