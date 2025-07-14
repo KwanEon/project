@@ -5,7 +5,7 @@ import { useParams, useNavigate } from "react-router-dom";
 function ProductDetail() {
   const { productId } = useParams(); // URL에서 productId 추출
   const navigate = useNavigate();
-  const [product, setProduct] = useState(null); // 초기값은 null
+  const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1); // 수량 상태 추가
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,7 +18,7 @@ function ProductDetail() {
         const res = await axios.get(`http://localhost:8080/products/${productId}`, {
           withCredentials: true,
         });
-        setProduct(res.data); // 서버에서 받은 데이터를 상태에 저장
+        setProduct(res.data);
       } catch (e) {
         setError("상품 정보를 불러오는 중 오류가 발생했습니다.");
       }

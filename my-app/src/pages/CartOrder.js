@@ -9,7 +9,7 @@ function CartOrder() {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
   const navigate = useNavigate();
-  const hasRedirected = useRef(false); // 중복 방지용
+  const hasRedirected = useRef(false);
 
   useEffect(() => {
     if (loading) return;

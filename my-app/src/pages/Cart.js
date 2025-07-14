@@ -4,11 +4,11 @@ import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
 
 function Cart() {
+  const { userRole, loading } = useContext(AuthContext);
   const [cartItems, setCartItems] = useState([]);
   const [error, setError] = useState("");
-  const { userRole, loading } = useContext(AuthContext); // 사용자 정보와 권한을 가져옴
   const navigate = useNavigate();
-  const hasRedirected = useRef(false); // 리다이렉션 방지용
+  const hasRedirected = useRef(false);
 
   useEffect(() => {
     if (loading) return;

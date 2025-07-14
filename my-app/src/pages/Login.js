@@ -7,7 +7,7 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const { setUser, setUserRole } = useContext(AuthContext); // 사용자 정보와 권한 설정 함수
+  const { setUser, setUserRole } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const location = useLocation();
