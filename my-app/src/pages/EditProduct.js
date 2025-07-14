@@ -12,7 +12,7 @@ const categoryOptions = [
 ];
 
 function EditProduct() {
-  const { userRole, loading } = useContext(AuthContext); // 사용자 정보와 역할을 가져옴
+  const { userRole, loading } = useContext(AuthContext);
   const { productId } = useParams();
   const navigate = useNavigate();
   const [formData, setFormData] = useState({

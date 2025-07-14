@@ -13,7 +13,7 @@ const categoryOptions = [
 ];
 
 function ProductList() {
-  const { userRole } = useContext(AuthContext); // 사용자 정보와 역할을 가져옴
+  const { userRole } = useContext(AuthContext);
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");

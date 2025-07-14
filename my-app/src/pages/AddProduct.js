@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext"; // 사용자 인증 컨텍스트
+import { AuthContext } from "../contexts/AuthContext";
 
 const categoryOptions = [
   { value: "ELECTRONICS", label: "전자제품" },
@@ -12,7 +12,7 @@ const categoryOptions = [
 ];
 
 function AddProduct() {
-  const { user, userRole, loading } = useContext(AuthContext); // 사용자 정보와 역할을 가져옴
+  const { user, userRole, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
