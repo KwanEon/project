@@ -4,45 +4,56 @@ import axios from "axios";
 import { AuthContext } from "../contexts/AuthContext";
 
 function ReviewEditForm() {
-  const { user, userRole } = useContext(AuthContext);
+  const { userRole } = useContext(AuthContext);
   const { reviewId } = useParams();
   const navigate = useNavigate();
-  const hasAlerted = useRef(false);
+  const hasRedirected = useRef(false);
 
   const [rating, setRating] = useState(0);
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!hasAlerted.current) {
-      hasAlerted.current = true;
-
-      if (userRole === "ANONYMOUS") {
-        setTimeout(() => {
+    const fetchReview = async () => {
+      if (!hasRedirected.current) {
+        if (userRole === "ANONYMOUS") {
+          hasRedirected.current = true;
           alert("로그인이 필요합니다.");
           navigate("/login");
-        }, 1);
-        return;
+          return;
+        }
       }
 
-      axios
-        .get(`http://localhost:8080/products/reviews/${reviewId}`, {
-          withCredentials: true,
-        })
-        .then((res) => {
-          setRating(res.data.rating);
-          setContent(res.data.reviewText);
-        })
-        .catch((err) => {
+      try {
+        const res = await axios.get(
+          `http://localhost:8080/products/reviews/${reviewId}`,
+          { withCredentials: true }
+        );
+
+        setRating(res.data.rating);
+        setContent(res.data.reviewText);
+      } catch (err) {
+        if (!hasRedirected.current) {
           console.error(err);
-          alert("리뷰 정보를 불러오지 못했습니다.");
+          hasRedirected.current = true;
+
+          const status = err.response?.status;
+          if (status === 403) {
+            alert("잘못된 접근입니다.");
+          } else {
+            alert("리뷰 정보를 불러오지 못했습니다.");
+          }
+
           navigate(-1);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
-  }, [reviewId, navigate, userRole]);
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchReview();
+  }, [userRole, reviewId, navigate]);
+
 
   if (userRole === "ANONYMOUS" || loading) {
     return null;

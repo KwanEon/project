@@ -21,12 +21,9 @@ function IndOrder() {
 
     if (!hasAlerted.current) {
       hasAlerted.current = true;
-
       if (userRole === "ANONYMOUS") {
-        setTimeout(() => {
-          alert("로그인이 필요합니다.");
-          navigate("/login");
-        }, 1);
+        alert("로그인이 필요합니다.");
+        navigate("/login");
         return;
       }
 
