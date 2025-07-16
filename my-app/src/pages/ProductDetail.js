@@ -144,7 +144,7 @@ function ProductDetail() {
             onClick={handleOrder}
             style={{
               marginTop: "1rem",
-              backgroundColor: "#4CAF50",
+              backgroundColor: "#2200ffff",
               color: "#fff",
               border: "none",
               padding: "0.5rem 1rem",

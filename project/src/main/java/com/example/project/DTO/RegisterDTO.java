@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 
 @Getter
 @Setter
@@ -34,6 +35,7 @@ public class RegisterDTO {
     private String email;
 
     @NotBlank(message = "전화번호는 필수 입력 항목입니다.")
+    @Pattern(regexp = "^\\d{11}$")   // 숫자 11자리만 허용
     private String phoneNumber;
 
     @NotBlank(message = "주소는 필수 입력 항목입니다.")

@@ -30,21 +30,16 @@ public class Product {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @NotNull
-    @Size(min = 1, max = 100)
     @Column(nullable = false, unique = true)
     private String name;
 
-    @Size(min = 1, max = 255)
     private String imageUrl;
 
     private String description;
 
-    @Min(0)
     @Column(nullable = false)
     private double price;
 
-    @Min(0)
     @Column(nullable = false)
     private int stock;
 
