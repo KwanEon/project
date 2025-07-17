@@ -5,13 +5,13 @@ import com.example.project.Model.Product.Category;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import com.example.project.Repository.ProductRepository;
 import com.example.project.Model.Product;
 import com.example.project.DTO.ProductDTO;
 import com.example.project.DTO.ReviewResponseDTO;
-
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,13 +20,13 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional(readOnly = true)
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Product getProductById(Long id) {
+        return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
     }
 
     @Transactional(readOnly = true)
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다"));
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -46,7 +46,7 @@ public class ProductService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public void updateProduct(Long id, ProductDTO productDTO) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다"));
+        Product product = getProductById(id);
         product.setName(productDTO.getName());
         product.setImageUrl("/static/images/" + productDTO.getName() + ".jpg");
         product.setDescription(productDTO.getDescription());
@@ -59,23 +59,23 @@ public class ProductService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public void deleteProduct(Long id) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다"));
+        Product product = getProductById(id);
         productRepository.delete(product);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> searchProductsByName(String keyword) {
-        return productRepository.findByNameContainingIgnoreCase(keyword);
+    public Page<Product> searchProductsByName(String keyword, Pageable pageable) {
+        return productRepository.findByNameContainingIgnoreCase(keyword, pageable);
     }
 
     @Transactional(readOnly = true)
-    public List<Product> searchProductsByCategory(Category category) {
-        return productRepository.findByCategory(category);
+    public Page<Product> searchProductsByCategory(Category category, Pageable pageable) {
+        return productRepository.findByCategory(category, pageable);
     }
     
     @Transactional(readOnly = true)
-    public List<Product> searchProductsByNameAndCategory(Category category, String keyword) {
-        return productRepository.findByCategoryAndNameContainingIgnoreCase(category, keyword);
+    public Page<Product> searchProductsByNameAndCategory(Category category, String keyword, Pageable pageable) {
+        return productRepository.findByCategoryAndNameContainingIgnoreCase(category, keyword, pageable);
     }
 
     public ProductDTO convertToDTO(Product product) {
@@ -94,11 +94,5 @@ public class ProductService {
                 )
                 .build();
         return dto;
-    }
-
-    public List<ProductDTO> convertToDTOList(List<Product> products) {
-        return products.stream()
-                .map(this::convertToDTO)
-                .toList();
     }
 }

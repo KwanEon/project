@@ -18,14 +18,16 @@ function ProductList() {
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState("");
   const [keyword, setKeyword] = useState("");
+  const [page, setPage] = useState(0); // 현재 페이지 번호
+  const [totalPages, setTotalPages] = useState(0); // 전체 페이지 수
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const fetchProducts = async () => {   // 상품 목록을 가져오는 함수
+  const fetchProducts = async (currentPage = 0) => {   // 상품 목록을 가져오는 함수
     setLoading(true);   // 로딩 상태 시작
     setError(""); // 에러 메시지 초기화
     try {
-      const params = {};
+      const params = { page : currentPage };
       if (category) params.category = category;
       if (keyword) params.keyword = keyword;
 
@@ -34,10 +36,12 @@ function ProductList() {
         withCredentials: true, // 쿠키(세션) 포함 → 로그인 정보 전송
       });
 
-      if (Array.isArray(res.data)) {  // 응답이 배열인 경우
-        setProducts(res.data);
-      } else if (Array.isArray(res.data.data)) {  // { data: [...] } 형태인 경우
-        setProducts(res.data.data);
+      const data = res.data;
+
+      if (Array.isArray(data.content)) {  // 응답이 배열인 경우
+        setProducts(data.content);
+        setPage(data.number);
+        setTotalPages(data.totalPages);
       } else {  // 응답이 배열이 아닌 경우
         setProducts([]);
         setError("상품 데이터가 배열 형식이 아닙니다.");
@@ -50,11 +54,12 @@ function ProductList() {
   };
 
   useEffect(() => {
-    fetchProducts();
+    fetchProducts(page);
   }, []);
 
   const handleAddProduct = () => navigate("/add-product");
   const handleEditProduct = (productId) => navigate(`/edit-product/${productId}`);
+  const handlePageChange = (newPage) => fetchProducts(newPage);
 
   const handleDeleteProduct = async (productId) => {
     const confirmDelete = window.confirm("정말로 이 상품을 삭제하시겠습니까?");
@@ -128,6 +133,29 @@ function ProductList() {
           ))
         )}
       </ul>
+
+      {totalPages > 1 && (
+        <div style={{ marginTop: "1rem" }}>
+          {[...Array(totalPages)].map((_, idx) => (
+            <button
+              key={idx}
+              onClick={() => handlePageChange(idx)}
+              disabled={idx === page}
+              style={{
+                margin: "0 0.25rem",
+                fontWeight: idx === page ? "bold" : "normal",
+                padding: "0.3rem 0.6rem",
+                border: "1px solid #ccc",
+                borderRadius: "4px",
+                backgroundColor: idx === page ? "#ddd" : "white",
+                cursor: "pointer"
+              }}
+            >
+              {idx + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

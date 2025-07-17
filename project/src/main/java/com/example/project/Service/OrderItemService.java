@@ -33,10 +33,4 @@ public class OrderItemService {
     public List<OrderItem> getOrderItemsByOrderId(Long orderId) {   // 주문 ID로 주문 항목 조회
         return orderItemRepository.findByOrderId(orderId);
     }
-
-    public void deleteOrderItem(Long orderItemId) {
-        OrderItem orderItem = orderItemRepository.findById(orderItemId)
-            .orElseThrow(() -> new IllegalArgumentException("주문 항목을 찾을 수 없습니다."));
-        orderItemRepository.delete(orderItem);
-    }
 }

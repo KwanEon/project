@@ -3,7 +3,6 @@ package com.example.project.Service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-
 import com.example.project.Repository.OrderRepository;
 import com.example.project.Repository.UserRepository;
 import com.example.project.Repository.ProductRepository;
@@ -35,6 +34,11 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final ReviewRepository reviewRepository;
 
+    @Transactional(readOnly = true)
+    public Order getOrderById(Long orderId) {   // 주문 상세 조회
+        return orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
+    }
+
     public Order placeOrder(Long userId) {      // 주문 생성(장바구니)
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다"));
         List<CartItem> cartItems = cartItemService.getCartItemsByUserId(userId);
@@ -50,7 +54,6 @@ public class OrderService {
                 .build();
         orderRepository.save(order);
 
-        // 총 금액 계산
         double totalPrice = 0;
 
         // 각 장바구니 항목을 주문 항목으로 변환
@@ -120,7 +123,6 @@ public class OrderService {
         return order;
     }
 
-
     @Transactional(readOnly = true)
     public List<OrderDTO> getOrdersByUserId(Long userId) {   // 사용자별 주문 목록 조회
         Map<Long, Long> myReviewMap = reviewRepository.findByUserId(userId).stream()
@@ -147,11 +149,6 @@ public class OrderService {
                         .build())
                 .toList();
         return orderDTOs;
-    }
-
-    @Transactional(readOnly = true)
-    public Order getOrderById(Long orderId) {   // 주문 상세 조회
-        return orderRepository.findById(orderId).orElseThrow(() -> new IllegalArgumentException("주문을 찾을 수 없습니다"));
     }
 
     public void cancelOrder(Long orderId) {     // 주문 취소

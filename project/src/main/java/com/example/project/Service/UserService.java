@@ -17,6 +17,11 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    @Transactional(readOnly = true)
+    private User findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+    }
+
     public List<User> getUserList() {
         return userRepository.findAll();
     }
@@ -124,17 +129,7 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public User getUserById(Long id) {
-        return userRepository.findById(id).orElse(null);
-    }
-
-    @Transactional(readOnly = true)
     public List<User> getAllUsers() {
         return userRepository.findAll();
-    }
-
-    @Transactional(readOnly = true)
-    private User findUserById(Long id) {
-        return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
     }
 }
