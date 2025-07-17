@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import com.example.project.Service.ProductService;
 import com.example.project.Service.ReviewService;
 import com.example.project.Repository.ReviewRepository;
@@ -15,7 +17,6 @@ import com.example.project.DTO.ReviewDTO;
 import com.example.project.Security.CustomUserDetails;
 import com.example.project.Model.Product.Category;
 import jakarta.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/products")
@@ -26,19 +27,22 @@ public class ProductController {
     private final ReviewRepository reviewRepository;
 
     @GetMapping // 상품 목록 조회
-    public ResponseEntity<List<ProductDTO>> getProducts(@RequestParam(value = "category", required = false) Category category,
-                                                        @RequestParam(value = "keyword", required = false) String keyword) {
-        List<Product> products;
+    public ResponseEntity<Page<ProductDTO>> getProducts(@RequestParam(value = "category", required = false) Category category,
+                                                        @RequestParam(value = "keyword", required = false) String keyword,
+                                                        @RequestParam(value = "page", defaultValue = "0") int page) {
+        PageRequest pageRequest = PageRequest.of(page, 10);
+        Page<Product> products;
+
         if (category != null && (keyword == null || keyword.isEmpty())) {
-            products = productService.searchProductsByCategory(category);
+            products = productService.searchProductsByCategory(category, pageRequest);
         } else if (category == null && keyword != null && !keyword.isEmpty()) {
-            products = productService.searchProductsByName(keyword);
+            products = productService.searchProductsByName(keyword, pageRequest);
         } else if (category != null && keyword != null && !keyword.isEmpty()) {
-            products = productService.searchProductsByNameAndCategory(category, keyword);
+            products = productService.searchProductsByNameAndCategory(category, keyword, pageRequest);
         } else {
-            products = productService.getAllProducts();
+            products = productService.getAllProducts(pageRequest);
         }
-        List<ProductDTO> productDTOs = productService.convertToDTOList(products);
+        Page<ProductDTO> productDTOs = products.map(productService::convertToDTO);
         return ResponseEntity.ok(productDTOs);
     }
 

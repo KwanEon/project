@@ -21,8 +21,8 @@ public class CartItemService {
     private final ProductRepository productRepository;
 
     public void addCartItem(Long userId, Long productId, int quantity) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("User not found"));
-        Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("Product not found"));
+        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
+        Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
         CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId);
 
         if (cartItem != null) {
@@ -58,7 +58,7 @@ public class CartItemService {
     }
 
     public void updateCartItem(Long id, int change) {
-        CartItem cartItem = cartItemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
+        CartItem cartItem = findById(id);
         int newQuantity = cartItem.getQuantity() + change;
         if (newQuantity < 1) {
             throw new IllegalArgumentException("수량은 1 이상이어야 합니다.");
@@ -80,6 +80,6 @@ public class CartItemService {
     }
 
     public CartItem findById(Long id) {
-        return cartItemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Cart item not found"));
+        return cartItemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("장바구니가 비어있습니다."));
     }
 }
