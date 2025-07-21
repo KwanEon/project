@@ -20,7 +20,7 @@ public class ReviewResponseDTO {
     private String reviewer;
     private LocalDateTime reviewDate;
 
-    public static ReviewResponseDTO from(Review review) {   // 엔티티를 DTO로 변환하는 메서드
+    public static ReviewResponseDTO from(Review review) {
         return ReviewResponseDTO.builder()
                 .id(review.getId())
                 .reviewText(review.getReviewText())
