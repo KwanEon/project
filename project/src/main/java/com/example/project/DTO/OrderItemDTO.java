@@ -1,5 +1,7 @@
 package com.example.project.DTO;
 
+import com.example.project.Model.OrderItem;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,4 +21,16 @@ public class OrderItemDTO {
     private int quantity;
     private double price;
     private Long reviewId;
+
+    public static OrderItemDTO from(OrderItem orderItem, Long reviewId) {
+        return OrderItemDTO.builder()
+                .id(orderItem.getId())
+                .orderId(orderItem.getOrder().getId())
+                .productId(orderItem.getProduct().getId())
+                .productName(orderItem.getProduct().getName())
+                .quantity(orderItem.getQuantity())
+                .price(orderItem.getPrice())
+                .reviewId(reviewId)
+                .build();
+    }
 }

@@ -136,16 +136,11 @@ public class OrderService {
                         .status(order.getStatus().name())
                         .totalPrice(order.getTotalPrice())
                         .orderItems(order.getOrderItems().stream()
-                                .map((OrderItem orderItem) -> OrderItemDTO.builder()
-                                        .id(orderItem.getId())
-                                        .orderId(order.getId())
-                                        .productId(orderItem.getProduct().getId())
-                                        .productName(orderItem.getProduct().getName())
-                                        .quantity(orderItem.getQuantity())
-                                        .price(orderItem.getPrice())
-                                        .reviewId(myReviewMap.getOrDefault(orderItem.getProduct().getId(), null)) // 리뷰 ID 추가
-                                        .build())
-                                .toList())
+                            .map(orderItem -> OrderItemDTO.from(
+                                orderItem,
+                                myReviewMap.getOrDefault(orderItem.getProduct().getId(), null)
+                            ))
+                            .toList())
                         .build())
                 .toList();
         return orderDTOs;
