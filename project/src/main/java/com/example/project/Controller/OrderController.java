@@ -44,14 +44,14 @@ public class OrderController {
                                                     @PathVariable("cartId") Long cartId,
                                                     @RequestParam("operation") String operation) {
         if (cartItemService.findById(cartId).getUser().getId() != principal.getUserId()) {
-            return ResponseEntity.status(403).body("권한이 없습니다. 해당 장바구니 아이템을 수정할 수 없습니다.");
+            return ResponseEntity.status(403).body("권한이 없습니다. 해당 장바구니 상품을 수정할 수 없습니다.");
         }
         if (!operation.equals("increase") && !operation.equals("decrease")) {   // 수량 변경 작업이 'increase' 또는 'decrease'가 아닐 경우
             return ResponseEntity.badRequest().body("잘못된 요청입니다. 'increase' 또는 'decrease'만 허용됩니다.");
         }
         int change = operation.equals("increase") ? 1 : -1; // 수량 변경 값 설정
         cartItemService.updateCartItem(cartId, change);
-        return ResponseEntity.ok("장바구니 아이템 수량이 업데이트되었습니다.");
+        return ResponseEntity.ok("장바구니 상품 수량이 업데이트되었습니다.");
     }
 
     @DeleteMapping("/cartitem")   // 장바구니 전체 삭제

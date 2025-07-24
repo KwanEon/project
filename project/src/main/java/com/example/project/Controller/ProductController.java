@@ -83,7 +83,7 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> addProduct(@RequestBody @Valid ProductDTO productDTO) {
         productService.addProduct(productDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body("Product added successfully");
+        return ResponseEntity.status(HttpStatus.CREATED).body("상품 추가 완료.");
     }
 
     @PutMapping("/{productId}") // 상품 수정
@@ -91,13 +91,13 @@ public class ProductController {
     public ResponseEntity<String> updateProduct(@PathVariable("productId") Long productId,
                                                 @RequestBody @Valid ProductDTO productDTO) {
         productService.updateProduct(productId, productDTO);
-        return ResponseEntity.ok("Product updated successfully");
+        return ResponseEntity.ok("상품 업데이트 완료.");
     }
 
     @DeleteMapping("/{productId}") // 상품 삭제
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<String> deleteProduct(@PathVariable("productId") Long productId) {
         productService.deleteProduct(productId);
-        return ResponseEntity.ok("Product deleted successfully");
+        return ResponseEntity.ok("상품 삭제 완료.");
     }
 }
