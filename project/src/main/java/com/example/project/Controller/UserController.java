@@ -12,6 +12,8 @@ import com.example.project.Service.UserService;
 import jakarta.validation.Valid;
 import com.example.project.Model.User;
 import java.util.List;
+
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
 
 
@@ -34,6 +36,7 @@ public class UserController {
   }
 
   @GetMapping("/admin/userlist")	// 유저 리스트 불러오기
+  @PreAuthorize("hasRole('ADMIN')")
   public ResponseEntity<List<User>> ShowUserList(@AuthenticationPrincipal CustomUserDetails principal) {
     if (principal == null || !principal.hasRole("ROLE_ADMIN")) {  // 로그인 안했거나 관리자 권한이 없는 경우
         return ResponseEntity.status(403).body(null);  // 권한 없음
@@ -68,7 +71,7 @@ public class UserController {
   @GetMapping("/auth/user")   // 현재 로그인한 유저 정보 조회
   public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal CustomUserDetails principal) {
     if (principal == null) {
-        return ResponseEntity.status(401).body("Unauthorized");
+        return ResponseEntity.status(401).body("권한이 없습니다.");
     }
     User user = principal.getUser();
     UserDTO dto = new UserDTO(user.getId(), user.getUsername(), user.getName(),
