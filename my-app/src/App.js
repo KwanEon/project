@@ -15,7 +15,6 @@ import Review from "./pages/Review";
 import EditReview from "./pages/EditReview";
 import Layout from "./components/Layout";
 import { AuthContext } from "./contexts/AuthContext"
-import axios from "axios";
 
 function App() {
   const { loading } = useContext(AuthContext);

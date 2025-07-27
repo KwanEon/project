@@ -23,7 +23,6 @@ function Login() {
 
     try {
       await axios.post("http://localhost:8080/auth/login", params, {
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
         withCredentials: true,
       });
 
@@ -55,14 +54,14 @@ function Login() {
       <form onSubmit={handleLogin}>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="아이디"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
           required
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="비밀번호"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
