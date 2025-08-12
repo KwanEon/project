@@ -35,9 +35,6 @@ public class RegisterDTO {
     private String email;
 
     @NotBlank(message = "전화번호는 필수 입력 항목입니다.")
-    @Pattern(regexp = "^\\d{11}$")   // 숫자 11자리만 허용
+    @Pattern(regexp = "^\\d{11}$", message = "전화번호 11자리를 입력해주세요.")   // 숫자 11자리만 허용
     private String phoneNumber;
-
-    @NotBlank(message = "주소는 필수 입력 항목입니다.")
-    private String address;
 }

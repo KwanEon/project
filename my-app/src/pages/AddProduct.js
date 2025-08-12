@@ -58,7 +58,7 @@ function AddProduct() {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/products",
+        `${process.env.REACT_APP_API_BASE_URL}/products`,
         formData,
         { withCredentials: true }
       );

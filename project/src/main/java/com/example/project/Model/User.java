@@ -44,7 +44,7 @@ public class User {
     @Column(nullable = false, unique = true)
     private String phoneNumber;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = true)
     private String address;
 
     public enum Role {
@@ -62,6 +62,10 @@ public class User {
     @Column(nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    private boolean enabled;    // 이메일 인증 여부
+
+    private String verificationToken; // 이메일 인증 토큰
 
     @Builder.Default
     @OneToMany(mappedBy = "user")

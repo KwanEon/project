@@ -9,8 +9,10 @@ import org.springframework.session.web.http.CookieSerializer;
 import org.springframework.session.web.http.DefaultCookieSerializer;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.lang.NonNull;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 @EnableWebSecurity
+@EnableAsync
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 

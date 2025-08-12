@@ -2,6 +2,7 @@ import React, {useContext } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import EmailVerify from "./pages/EmailVerify";
 import Home from "./pages/Main";
 import { ProductList } from "./pages/Products";
 import { ProductDetail } from "./pages/ProductDetail";
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/auth/verify" element={<EmailVerify />} />
           <Route path="/" element={<Home />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/add-product" element={<AddProduct />} />

@@ -11,28 +11,42 @@ import com.example.project.DTO.UserDTO;
 import com.example.project.Service.UserService;
 import jakarta.validation.Valid;
 import com.example.project.Model.User;
+import com.example.project.Repository.UserRepository;
 import java.util.List;
-
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;
-
+import org.springframework.validation.FieldError;
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+  private final UserRepository userRepository;
   private final UserService userService;
 
-  @PostMapping("/register")	// 유저 등록
-  public ResponseEntity<?> Register(@RequestBody @Valid RegisterDTO RegisterDTO, BindingResult result) {
-    if (result.hasErrors()) {  // 유효성 검사 실패
-        return ResponseEntity.badRequest().body(result.getAllErrors());
-    }
-    try {
-        userService.saveUser(RegisterDTO);	// 유저 등록
-    } catch (Exception e) {   // 예외 처리
-        return ResponseEntity.badRequest().body("회원가입 실패: " + e.getMessage());
-    }
-    return ResponseEntity.ok("회원가입 성공");
+  @PostMapping("/register")
+  public ResponseEntity<?> Register(@RequestBody @Valid RegisterDTO registerDTO, BindingResult result) {
+      if (result.hasErrors()) {
+          Map<String, String> fieldErrors = new HashMap<>();
+          for (FieldError error : result.getFieldErrors()) {
+              fieldErrors.put(error.getField(), error.getDefaultMessage());
+          }
+          return ResponseEntity.badRequest().body(Map.of(
+              "status", "validation_error",
+              "errors", fieldErrors
+          ));
+      }
+
+      try {
+          userService.saveUser(registerDTO);
+          return ResponseEntity.ok("회원가입 성공");
+      } catch (Exception e) {
+          return ResponseEntity.badRequest().body(Map.of(
+              "status", "error",
+              "message", e.getMessage()
+          ));
+      }
   }
 
   @GetMapping("/admin/userlist")	// 유저 리스트 불러오기
@@ -86,5 +100,17 @@ public class UserController {
         .map(GrantedAuthority::getAuthority)
         .orElse("USER");
     return ResponseEntity.ok(role);
+  }
+
+  @GetMapping("/auth/verify")  // 이메일 인증
+  public ResponseEntity<?> verifyEmail(@RequestParam String token) {
+    User user = userRepository.findByVerificationToken(token)
+        .orElseThrow(() -> new RuntimeException("유효하지 않은 토큰"));
+
+    user.setEnabled(true);
+    user.setVerificationToken(null); // 재사용 방지
+    userRepository.save(user);
+
+    return ResponseEntity.ok("이메일 인증 성공");
   }
 }

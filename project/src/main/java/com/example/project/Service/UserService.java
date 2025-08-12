@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import com.example.project.DTO.RegisterDTO;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final EmailService emailService;
 
     @Transactional(readOnly = true)
     private User findUserById(Long id) {
@@ -35,7 +37,6 @@ public class UserService {
                 .name(user.getName())
                 .email(user.getEmail())
                 .phoneNumber(user.getPhoneNumber())
-                .address(user.getAddress())
                 .build();
     }
 
@@ -55,18 +56,26 @@ public class UserService {
             role = User.Role.ADMIN;
         }
 
+        String token = UUID.randomUUID().toString(); // 이메일 인증 토큰 생성
+
         User user = User.builder()
                 .username(RegisterDTO.getUsername())
                 .password(bCryptPasswordEncoder.encode(RegisterDTO.getPassword()))
                 .name(RegisterDTO.getName())
                 .email(RegisterDTO.getEmail())
                 .phoneNumber(RegisterDTO.getPhoneNumber())
-                .address(RegisterDTO.getAddress())
                 .role(role)
+                .enabled(false)
+                .verificationToken(token)
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .build();
+
         userRepository.save(user);
+
+        // 이메일 전송
+        String link = "http://localhost:3000/auth/verify?token=" + token;
+        emailService.sendVerificationEmail(user.getEmail(), link);
     }
 
     public void updateName(Long userId, String newName) {
