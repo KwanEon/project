@@ -1,25 +1,25 @@
-# 1. Java 21 베이스 이미지 사용(eclipse Temurin = 윈도우, 리눅스, macOS에서 사용 가능)
+# 1. 빌드용 이미지 (eclipse-temurin - 윈도우, 리눅스, 맥OS 모두 호환)
 FROM eclipse-temurin:21-jdk AS build
-
-# 2. 작업 디렉토리 설정
 WORKDIR /app
 
-# 3. Gradle wrapper 복사 및 권한 부여
+# Gradle 관련 파일 먼저 복사
 COPY gradlew .
 COPY gradle gradle
-RUN chmod +x gradlew
+COPY build.gradle settings.gradle ./
 
-# 4. 프로젝트 복사 및 빌드
-COPY . .
+# 의존성 먼저 다운로드 (이 단계가 캐시됨)
+RUN ./gradlew dependencies --no-daemon
+
+# 소스 코드 복사 후 빌드
+COPY src ./src
 RUN ./gradlew build -x test --no-daemon
 
-# 5. 실제 실행 환경용 이미지 생성
-FROM eclipse-temurin:21-jdk
+# 2. 실행용 이미지 (JRE로 경량화)
+FROM eclipse-temurin:21-jre-jammy
 WORKDIR /app
 
-# 6. 위 빌드 이미지에서 JAR만 복사
+# 빌드된 JAR 파일만 복사
 COPY --from=build /app/build/libs/*.jar app.jar
 
 EXPOSE 8080
-
 ENTRYPOINT ["java", "-jar", "app.jar"]
