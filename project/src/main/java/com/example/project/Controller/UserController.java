@@ -28,13 +28,13 @@ public class UserController {
   @PostMapping("/register")
   public ResponseEntity<?> Register(@RequestBody @Valid RegisterDTO registerDTO, BindingResult result) {
       if (result.hasErrors()) {
-          Map<String, String> fieldErrors = new HashMap<>();
-          for (FieldError error : result.getFieldErrors()) {
-              fieldErrors.put(error.getField(), error.getDefaultMessage());
+          Map<String, String> fieldErrors = new HashMap<>();    // 필드별 에러 메시지 저장
+          for (FieldError error : result.getFieldErrors()) {    // 각 필드 에러 처리
+              fieldErrors.put(error.getField(), error.getDefaultMessage()); // 필드명과 에러 메시지 맵에 추가
           }
           return ResponseEntity.badRequest().body(Map.of(
-              "status", "validation_error",
-              "errors", fieldErrors
+              "status", "validation_error",     // 상태 코드
+              "errors", fieldErrors               // 필드별 에러 메시지
           ));
       }
 
@@ -43,8 +43,8 @@ public class UserController {
           return ResponseEntity.ok("회원가입 성공");
       } catch (Exception e) {
           return ResponseEntity.badRequest().body(Map.of(
-              "status", "error",
-              "message", e.getMessage()
+              "status", "error",               // 상태 코드
+              "message", e.getMessage()          // 에러 메시지
           ));
       }
   }
