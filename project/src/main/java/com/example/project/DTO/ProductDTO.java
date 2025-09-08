@@ -1,4 +1,4 @@
-package com.example.project.DTO;
+package com.example.project.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -9,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import java.util.ArrayList;
 import java.util.List;
-import com.example.project.Model.Product.Category;
+
+import com.example.project.model.Product.Category;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;

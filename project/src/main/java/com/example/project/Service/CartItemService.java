@@ -1,15 +1,17 @@
-package com.example.project.Service;
+package com.example.project.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import com.example.project.Repository.CartItemRepository;
-import com.example.project.DTO.CartItemDTO;
-import com.example.project.Model.CartItem;
-import com.example.project.Model.User;
-import com.example.project.Repository.UserRepository;
-import com.example.project.Model.Product;
-import com.example.project.Repository.ProductRepository;
+
+import com.example.project.dto.CartItemDTO;
+import com.example.project.model.CartItem;
+import com.example.project.model.Product;
+import com.example.project.model.User;
+import com.example.project.repository.CartItemRepository;
+import com.example.project.repository.ProductRepository;
+import com.example.project.repository.UserRepository;
+
 import java.util.List;
 
 @Service

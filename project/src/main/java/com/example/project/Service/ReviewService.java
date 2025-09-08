@@ -1,16 +1,18 @@
-package com.example.project.Service;
+package com.example.project.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
-import com.example.project.Repository.ReviewRepository;
-import com.example.project.Model.Review;
-import com.example.project.Model.Product;
-import com.example.project.Model.User;
-import com.example.project.Repository.UserRepository;
-import com.example.project.Repository.ProductRepository;
-import com.example.project.DTO.ReviewDTO;
+
+import com.example.project.dto.ReviewDTO;
+import com.example.project.model.Product;
+import com.example.project.model.Review;
+import com.example.project.model.User;
+import com.example.project.repository.ProductRepository;
+import com.example.project.repository.ReviewRepository;
+import com.example.project.repository.UserRepository;
+
 import org.springframework.security.access.AccessDeniedException;
 
 @Service

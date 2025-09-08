@@ -1,4 +1,4 @@
-package com.example.project.Controller;
+package com.example.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,14 +8,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import com.example.project.Service.ProductService;
-import com.example.project.Service.ReviewService;
-import com.example.project.Repository.ReviewRepository;
-import com.example.project.Model.Product;
-import com.example.project.DTO.ProductDTO;
-import com.example.project.DTO.ReviewDTO;
-import com.example.project.Security.CustomUserDetails;
-import com.example.project.Model.Product.Category;
+import com.example.project.dto.ProductDTO;
+import com.example.project.dto.ReviewDTO;
+import com.example.project.model.Product;
+import com.example.project.model.Product.Category;
+import com.example.project.repository.ReviewRepository;
+import com.example.project.security.CustomUserDetails;
+import com.example.project.service.ProductService;
+import com.example.project.service.ReviewService;
 import jakarta.validation.Valid;
 
 @RestController

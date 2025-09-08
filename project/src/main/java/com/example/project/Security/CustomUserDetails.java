@@ -1,8 +1,11 @@
-package com.example.project.Security;
+package com.example.project.security;
 import lombok.Getter;
-import com.example.project.Model.User;
+
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.example.project.model.User;
+
 import java.util.Collections;
 import java.util.Collection;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

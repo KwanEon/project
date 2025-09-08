@@ -1,12 +1,14 @@
-package com.example.project.DTO;
+package com.example.project.dto;
 
 import java.time.LocalDateTime;
+
+import com.example.project.model.Review;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import com.example.project.Model.Review;
 
 @Getter
 @Setter

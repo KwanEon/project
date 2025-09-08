@@ -1,7 +1,8 @@
-package com.example.project.Security;
+package com.example.project.security;
 
-import com.example.project.Model.User;
-import com.example.project.Repository.UserRepository;
+import com.example.project.model.User;
+import com.example.project.repository.UserRepository;
+
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.security.core.userdetails.UserDetails;

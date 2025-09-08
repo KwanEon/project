@@ -1,8 +1,11 @@
-package com.example.project.Repository;
+package com.example.project.repository;
 
 import org.springframework.stereotype.Repository;
+
+import com.example.project.model.Order;
+
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.project.Model.Order;
+
 import java.util.List;
 
 @Repository

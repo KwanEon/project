@@ -1,12 +1,14 @@
-package com.example.project.Service;
+package com.example.project.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import com.example.project.Repository.OrderItemRepository;
-import com.example.project.Model.Product;
-import com.example.project.Model.Order;
-import com.example.project.Model.OrderItem;
+
+import com.example.project.model.Order;
+import com.example.project.model.OrderItem;
+import com.example.project.model.Product;
+import com.example.project.repository.OrderItemRepository;
+
 import java.util.List;
 
 @Service

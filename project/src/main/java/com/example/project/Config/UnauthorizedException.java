@@ -1,4 +1,4 @@
-package com.example.project.Config;
+package com.example.project.config;
 
 public class UnauthorizedException extends RuntimeException {
     public UnauthorizedException(String message) {

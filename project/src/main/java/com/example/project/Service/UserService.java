@@ -1,13 +1,15 @@
-package com.example.project.Service;
+package com.example.project.service;
 
-import com.example.project.Repository.UserRepository;
-import com.example.project.Model.User;
+import com.example.project.dto.RegisterDTO;
+import com.example.project.model.User;
+import com.example.project.repository.UserRepository;
+
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
-import com.example.project.DTO.RegisterDTO;
+
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
@@ -20,7 +22,7 @@ public class UserService {
     private final EmailService emailService;
 
     @Transactional(readOnly = true)
-    private User findUserById(Long id) {
+    public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
     }
 
@@ -40,7 +42,7 @@ public class UserService {
                 .build();
     }
 
-    public void saveUser(RegisterDTO RegisterDTO) {
+    public Long saveUser(RegisterDTO RegisterDTO) {
         if (userRepository.existsByUsername(RegisterDTO.getUsername())) {
             throw new IllegalArgumentException("이미 등록된 아이디입니다.");
         }
@@ -76,6 +78,8 @@ public class UserService {
         // 이메일 전송
         String link = "http://localhost:3000/auth/verify?token=" + token;
         emailService.sendVerificationEmail(user.getEmail(), link);
+
+        return user.getId();
     }
 
     public void updateName(Long userId, String newName) {

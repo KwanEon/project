@@ -1,6 +1,6 @@
-package com.example.project.DTO;
+package com.example.project.dto;
 
-import com.example.project.Model.OrderItem;
+import com.example.project.model.OrderItem;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

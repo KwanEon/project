@@ -1,17 +1,17 @@
-package com.example.project.Controller;
+package com.example.project.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
-import com.example.project.Security.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
+import com.example.project.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import com.example.project.DTO.RegisterDTO;
-import com.example.project.DTO.UserDTO;
-import com.example.project.Service.UserService;
+import com.example.project.dto.RegisterDTO;
+import com.example.project.dto.UserDTO;
+import com.example.project.security.CustomUserDetails;
+import com.example.project.repository.UserRepository;
 import jakarta.validation.Valid;
-import com.example.project.Model.User;
-import com.example.project.Repository.UserRepository;
+import com.example.project.model.User;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.GrantedAuthority;

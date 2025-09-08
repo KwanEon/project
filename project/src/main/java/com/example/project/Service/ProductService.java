@@ -1,16 +1,18 @@
-package com.example.project.Service;
+package com.example.project.service;
 
 import org.springframework.stereotype.Service;
-import com.example.project.Model.Product.Category;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import com.example.project.Repository.ProductRepository;
-import com.example.project.Model.Product;
-import com.example.project.DTO.ProductDTO;
-import com.example.project.DTO.ReviewResponseDTO;
+
+import com.example.project.dto.ProductDTO;
+import com.example.project.dto.ReviewResponseDTO;
+import com.example.project.model.Product;
+import com.example.project.model.Product.Category;
+import com.example.project.repository.ProductRepository;
+
 import java.time.LocalDateTime;
 
 @Service

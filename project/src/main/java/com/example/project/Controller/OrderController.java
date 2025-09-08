@@ -1,15 +1,15 @@
-package com.example.project.Controller;
+package com.example.project.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import lombok.RequiredArgsConstructor;
-import com.example.project.Service.OrderService;
+import com.example.project.dto.CartItemDTO;
+import com.example.project.dto.OrderDTO;
 import org.springframework.web.bind.annotation.*;
-import com.example.project.Security.CustomUserDetails;
-import com.example.project.Model.Order;
-import com.example.project.Service.CartItemService;
-import com.example.project.DTO.OrderDTO;
-import com.example.project.DTO.CartItemDTO;
+import com.example.project.security.CustomUserDetails;
+import com.example.project.service.CartItemService;
+import com.example.project.service.OrderService;
+import com.example.project.model.Order;
 import java.util.List;
 import java.util.Collections;
 

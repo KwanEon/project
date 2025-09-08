@@ -1,4 +1,4 @@
-package com.example.project.Model;
+package com.example.project.model;
 
 import jakarta.persistence.GeneratedValue;
 import java.time.LocalDateTime;
