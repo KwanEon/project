@@ -1,20 +1,16 @@
 package com.example.project.model;
 
-import jakarta.persistence.GeneratedValue;
 import java.time.LocalDateTime;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import jakarta.persistence.EnumType;
 import java.util.ArrayList;
 import java.util.List;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
@@ -53,12 +49,19 @@ public class Product {
     }
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     @Builder.Default
-    @OneToMany(mappedBy = "product", orphanRemoval = true)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL , orphanRemoval = true)
     private final List<Review> reviews = new ArrayList<>();
+
+    public void addReview(Review review) {
+        reviews.add(review);
+        review.setProduct(this);
+    }
 }

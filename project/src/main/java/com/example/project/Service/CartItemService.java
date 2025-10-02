@@ -22,7 +22,7 @@ public class CartItemService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
 
-    public void addCartItem(Long userId, Long productId, int quantity) {
+    public void addCartItem(Long userId, Long productId, int quantity) {    // 장바구니 추가
         User user = userRepository.findById(userId).orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
         Product product = productRepository.findById(productId).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
         CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId);
@@ -41,12 +41,12 @@ public class CartItemService {
     }
 
     @Transactional(readOnly = true)
-    public List<CartItem> getCartItemsByUserId(Long userId) {
+    public List<CartItem> getCartItemsByUserId(Long userId) {   // 장바구니 조회
         return cartItemRepository.findByUserId(userId);
     }
 
     @Transactional(readOnly = true)
-    public List<CartItemDTO> getCartItemDTOsByUserId(Long userId) {
+    public List<CartItemDTO> getCartItemDTOsByUserId(Long userId) {  // 장바구니 DTO 변환
         List<CartItem> cartItems = cartItemRepository.findByUserId(userId);
         return cartItems.stream()
             .map(cartItem -> new CartItemDTO(
@@ -59,7 +59,7 @@ public class CartItemService {
             .toList();
     }
 
-    public void updateCartItem(Long id, int change) {
+    public void updateCartItem(Long id, int change) {   // 장바구니 수량 변경
         CartItem cartItem = findById(id);
         int newQuantity = cartItem.getQuantity() + change;
         if (newQuantity < 1) {
@@ -69,11 +69,11 @@ public class CartItemService {
         cartItemRepository.save(cartItem);
     }
 
-    public void deleteCartItem(Long userid) {
+    public void deleteAllCartItemsByUserId(Long userid) {   // 장바구니 비우기
         cartItemRepository.deleteByUserId(userid);
     }
 
-    public void deleteCartItemByProductId(Long userId, Long productId) {
+    public void deleteCartItemByProductId(Long userId, Long productId) {    // 장바구니에서 특정 상품 삭제
         CartItem cartItem = cartItemRepository.findByUserIdAndProductId(userId, productId);
         if (cartItem == null) {
             throw new IllegalArgumentException("장바구니에 해당 상품이 없습니다.");
@@ -81,7 +81,7 @@ public class CartItemService {
         cartItemRepository.delete(cartItem);
     }
 
-    public CartItem findById(Long id) {
+    public CartItem findById(Long id) {  // 장바구니 아이템 찾기
         return cartItemRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("장바구니가 비어있습니다."));
     }
 }

@@ -2,7 +2,6 @@ package com.example.project.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 
 import com.example.project.dto.ReviewDTO;
@@ -24,27 +23,28 @@ public class ReviewService {
     private final UserRepository userRepository;
 
     @Transactional(readOnly = true)
-    public Review findReviewById(Long reviewId) {
+    public Review findReviewById(Long reviewId) {   // 리뷰 조회
         return reviewRepository.findById(reviewId).orElseThrow(() -> new IllegalArgumentException("리뷰를 찾을 수 없습니다."));
     }
 
-    public void addReview(Long productId, Long userId, ReviewDTO reviewDTO) {
+    public void addReview(Long productId, Long userId, ReviewDTO reviewDTO) {   // 리뷰 추가
         Product product = productRepository.findById(productId)
             .orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("유저를 찾을 수 없습니다."));
 
         Review review = Review.builder()
-            .product(product)
             .user(user)
             .reviewText(reviewDTO.getReviewText())
             .rating(reviewDTO.getRating())
-            .reviewDate(LocalDateTime.now())
             .build();
+
+        user.addReview(review); // 양방향 연관관계 설정
+        product.addReview(review);
         reviewRepository.save(review);
     }
 
-    public void updateReview(Long reviewId, Long userId, String reviewText, int rating) {
+    public void updateReview(Long reviewId, Long userId, String reviewText, int rating) {   // 리뷰 수정
         Review review = findReviewById(reviewId);
 
         if (!review.getUser().getId().equals(userId)) {
@@ -59,17 +59,16 @@ public class ReviewService {
 
         review.setReviewText(reviewText);
         review.setRating(rating);
-        review.setReviewDate(LocalDateTime.now());
         reviewRepository.save(review);
     }
 
-    public void deleteReview(Long reviewId) {
+    public void deleteReview(Long reviewId) {   // 리뷰 삭제
         Review review = findReviewById(reviewId);
         reviewRepository.delete(review);
     }
 
     @Transactional(readOnly = true)
-    public ReviewDTO getReviewForEdit(Long reviewId, Long userId) {
+    public ReviewDTO getReviewForEdit(Long reviewId, Long userId) {  // 리뷰 수정용 DTO 조회
         Review review = findReviewById(reviewId);
 
         // 작성자 본인인지 확인

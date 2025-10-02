@@ -103,7 +103,7 @@ public class UserController {
   }
 
   @GetMapping("/auth/verify")  // 이메일 인증
-  public ResponseEntity<?> verifyEmail(@RequestParam String token) {
+  public ResponseEntity<?> verifyEmail(@RequestParam("token") String token) {
     User user = userRepository.findByVerificationToken(token)
         .orElseThrow(() -> new RuntimeException("유효하지 않은 토큰"));
 

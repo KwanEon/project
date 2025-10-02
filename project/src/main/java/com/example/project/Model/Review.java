@@ -1,17 +1,13 @@
 package com.example.project.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import jakarta.persistence.GeneratedValue;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Getter
@@ -24,11 +20,11 @@ public class Review {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
@@ -36,6 +32,7 @@ public class Review {
     private String reviewText;
 
     @Column(nullable = false)
+    @UpdateTimestamp
     private LocalDateTime reviewDate;
 
     @Column(nullable = false)

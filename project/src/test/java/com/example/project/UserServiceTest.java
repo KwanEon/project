@@ -1,22 +1,22 @@
 package com.example.project;
 
+import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.test.context.ActiveProfiles;
-import com.example.project.dto.RegisterDTO;
 import com.example.project.service.UserService;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import static org.junit.jupiter.api.Assertions.*;
+import com.example.project.dto.RegisterDTO;
+import com.example.project.model.User;
 
 @SpringBootTest
-@ActiveProfiles("test")
 @Transactional
-class ProjectApplicationTests {
-	@Autowired
-	private UserService userService;
+public class UserServiceTest {
 
-	@Test
+    @Autowired
+    private UserService userService;
+    
+    @Test
 	public void 회원가입() throws Exception{
 		//given
 		RegisterDTO user = RegisterDTO.builder()
@@ -29,10 +29,10 @@ class ProjectApplicationTests {
 
 		//when
 		Long savedId = userService.saveUser(user);
-		System.out.println("저장된 사용자 ID: " + savedId);
 
 		//then
-		var savedUser = userService.findUserById(savedId);
+		User savedUser = userService.findUserById(savedId);
+		System.out.println("savedUser.id = " + savedUser.getId());
 		assertNotNull(savedUser);
 		assertEquals("testuser", savedUser.getUsername());
 		assertEquals("홍길동", savedUser.getName());
@@ -53,7 +53,7 @@ class ProjectApplicationTests {
 				.username("testuser")
 				.name("김철수")
 				.password("password456")
-				.email("email@email.com")
+				.email("email2@email.com")
 				.phoneNumber("01087654321")
 				.build();
 
@@ -61,8 +61,9 @@ class ProjectApplicationTests {
 		userService.saveUser(user1);
 
 		//then
-		assertThrows(IllegalArgumentException.class, () -> {
-			userService.saveUser(user2);
-		});
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+        userService.saveUser(user2);
+    	});
+    	assertEquals("이미 등록된 아이디입니다.", exception.getMessage());
 	}
 }

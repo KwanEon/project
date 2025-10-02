@@ -56,7 +56,7 @@ public class OrderController {
 
     @DeleteMapping("/cartitem")   // 장바구니 전체 삭제
     public ResponseEntity<?> deleteCartItem(@AuthenticationPrincipal CustomUserDetails principal) {
-        cartItemService.deleteCartItem(principal.getUserId());
+        cartItemService.deleteAllCartItemsByUserId(principal.getUserId());
         return ResponseEntity.ok("장바구니가 비워졌습니다.");
     }
 

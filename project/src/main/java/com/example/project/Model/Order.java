@@ -1,22 +1,15 @@
 package com.example.project.model;
 
-import jakarta.persistence.GeneratedValue;
 import java.time.LocalDateTime;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.NoArgsConstructor;
 import java.util.List;
-
 import java.util.ArrayList;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Getter
@@ -30,13 +23,15 @@ public class Order {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime orderDate;
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
 
@@ -51,7 +46,11 @@ public class Order {
     private double totalPrice;
 
     @Builder.Default
-    @Column(nullable = false)
-    @OneToMany(mappedBy = "order")
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
     private final List<OrderItem> orderItems = new ArrayList<>();
+    
+    public void addOrderItem(OrderItem orderItem) {
+        orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
 }

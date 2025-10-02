@@ -21,7 +21,6 @@ import com.example.project.repository.UserRepository;
 
 import java.util.List;
 import java.util.Map;
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,11 +49,10 @@ public class OrderService {
         }
 
         Order order = Order.builder()
-                .user(user)
-                .orderDate(LocalDateTime.now())
                 .status(Order.OrderStatus.PENDING)
                 .build();
-        orderRepository.save(order);
+
+        user.addOrder(order); // 양방향 연관관계 설정
 
         double totalPrice = 0;
 
@@ -80,7 +78,7 @@ public class OrderService {
         orderRepository.save(order);
 
         // 장바구니 비우기
-        cartItemService.deleteCartItem(userId);
+        cartItemService.deleteAllCartItemsByUserId(userId);
 
         return order;
     }
@@ -108,15 +106,16 @@ public class OrderService {
 
         // 주문 생성
         Order order = Order.builder()
-            .user(user)
-            .orderDate(LocalDateTime.now())
             .status(OrderStatus.PENDING)
             .totalPrice(totalPrice)
             .build();
-        orderRepository.save(order);
+
+        user.addOrder(order); // 양방향 연관관계 설정
 
         // 주문 항목 생성
         orderItemService.createOrderItem(order, product, quantity);
+
+        orderRepository.save(order);
 
         // 재고 차감
         product.setStock(product.getStock() - quantity);

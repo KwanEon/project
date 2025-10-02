@@ -17,18 +17,19 @@ import java.util.List;
 public class OrderItemService {
     private final OrderItemRepository orderItemRepository;
 
-    public void createOrderItem(Order order, Product product, int quantity) {   // 주문 항목 생성
+    public OrderItem createOrderItem(Order order, Product product, int quantity) {   // 주문 항목 생성
         if (quantity <= 0) {
             throw new IllegalArgumentException("수량은 0보다 커야 합니다.");
         }
 
         OrderItem orderItem = OrderItem.builder()
-            .order(order)
             .product(product)
             .quantity(quantity)
             .price(product.getPrice() * quantity)
             .build();
-        orderItemRepository.save(orderItem);
+
+        order.addOrderItem(orderItem); // 양방향 연관관계 설정
+        return orderItem;
     }
 
     @Transactional(readOnly = true)
