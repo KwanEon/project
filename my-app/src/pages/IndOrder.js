@@ -33,7 +33,7 @@ function IndOrder() {
       }
 
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/products/${productId}`, {
+        .get(`http://localhost:8080/products/${productId}`, {
           withCredentials: true,
         })
         .then((res) => {
@@ -56,7 +56,7 @@ function IndOrder() {
   const handlePayment = () => {
     axios
       .post(
-        `${process.env.REACT_APP_API_BASE_URL}/order/${productId}?quantity=${quantity}`,
+        `http://localhost:8080/order/${productId}?quantity=${quantity}`,
         {},
         { withCredentials: true }
       )

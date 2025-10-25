@@ -22,16 +22,16 @@ function Login() {
     params.append("password", password);
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/auth/login`, params, {
+      await axios.post(`http://localhost:8080/auth/login`, params, {
         withCredentials: true,
       });
 
       // 로그인 성공 후 사용자 정보 요청
-      const resUser = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/user`, { withCredentials: true });
+      const resUser = await axios.get(`http://localhost:8080/auth/user`, { withCredentials: true });
       setUser(resUser.data);  // 사용자 정보 설정
 
       // 권한 정보도 별도 요청
-      const resRole = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/role`, { withCredentials: true });
+      const resRole = await axios.get(`http://localhost:8080/auth/role`, { withCredentials: true });
       setUserRole(resRole.data);  // 사용자 권한 설정
 
       alert("로그인 되었습니다.");

@@ -31,7 +31,7 @@ function ProductList() {
       if (category) params.category = category;
       if (keyword) params.keyword = keyword;
 
-      const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products`, {
+      const res = await axios.get(`http://localhost:8080/products`, {
         params, // 카테고리와 키워드를 쿼리 파라미터로 전달
         withCredentials: true, // 쿠키(세션) 포함 → 로그인 정보 전송
       });
@@ -65,7 +65,7 @@ function ProductList() {
     const confirmDelete = window.confirm("정말로 이 상품을 삭제하시겠습니까?");
     if (!confirmDelete) return; // 사용자가 삭제를 취소한 경우
     try {
-      await axios.delete(`${process.env.REACT_APP_API_BASE_URL}/products/${productId}`, { withCredentials: true });
+      await axios.delete(`http://localhost:8080/products/${productId}`, { withCredentials: true });
       fetchProducts();  // 삭제 후 상품 목록을 다시 불러옴
       alert("상품이 삭제되었습니다.");
     } catch (e) {

@@ -17,7 +17,7 @@ function EmailVerify() {
       }
 
       try {
-        await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/verify?token=${token}`, {
+        await axios.get(`http://localhost:8080/auth/verify?token=${token}`, {
           withCredentials: true,
         });
         if (!hasRedirected.current) {

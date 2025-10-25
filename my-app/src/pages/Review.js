@@ -25,7 +25,7 @@ function ReviewForm() {
       const validateReviewEligibility = async () => {
         try {
           // 1. 상품 존재 확인
-          await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products/${productId}`, { withCredentials: true });
+          await axios.get(`http://localhost:8080/products/${productId}`, { withCredentials: true });
         } catch (err) {
           alert("해당 상품의 상품평을 작성할 수 없습니다.");
           navigate(-1);
@@ -34,7 +34,7 @@ function ReviewForm() {
 
         try {
           // 2. 유저의 주문 목록에서 상품 구매 여부 확인
-          const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/orders`, { withCredentials: true });
+          const res = await axios.get(`http://localhost:8080/auth/orders`, { withCredentials: true });
           const orders = res.data;
 
           let hasPurchased = false;
@@ -92,7 +92,7 @@ function ReviewForm() {
 
     try {
       await axios.post(
-        `${process.env.REACT_APP_API_BASE_URL}/products/${productId}/reviews`,
+        `http://localhost:8080/products/${productId}/reviews`,
         {
           rating,
           reviewText: content,

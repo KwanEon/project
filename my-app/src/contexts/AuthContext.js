@@ -11,10 +11,10 @@ export function AuthProvider({ children }) {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/user`, { withCredentials: true });
+        const res = await axios.get(`http://localhost:8080/auth/user`, { withCredentials: true });
         if (res.data) {
           setUser(res.data);
-          const roleRes = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/role`, { withCredentials: true });
+          const roleRes = await axios.get(`http://localhost:8080/auth/role`, { withCredentials: true });
           setUserRole(roleRes.data); // 예: 'ROLE_USER', 'ROLE_ADMIN'
         } else {
           setUser(null);

@@ -26,7 +26,7 @@ function ReviewEditForm() {
 
       try {
         const res = await axios.get(
-          `${process.env.REACT_APP_API_BASE_URL}/products/reviews/${reviewId}`,
+          `http://localhost:8080/products/reviews/${reviewId}`,
           { withCredentials: true }
         );
 
@@ -62,7 +62,7 @@ function ReviewEditForm() {
   const handleSubmit = async () => {
     try {
       await axios.put(
-        `${process.env.REACT_APP_API_BASE_URL}/products/reviews/${reviewId}`,
+        `http://localhost:8080/products/reviews/${reviewId}`,
         { rating, reviewText: content },
         { withCredentials: true }
       );

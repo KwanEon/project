@@ -15,7 +15,7 @@ function ProductDetail() {
       setLoading(true);
       setError("");
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products/${productId}`, {
+        const res = await axios.get(`http://localhost:8080/products/${productId}`, {
           withCredentials: true,
         });
         setProduct(res.data);
@@ -40,7 +40,7 @@ function ProductDetail() {
   const handleAddToCart = () => {
     axios
       .post(
-        `${process.env.REACT_APP_API_BASE_URL}/cartitem/${productId}?quantity=${quantity}`, // 수량을 쿼리 파라미터로 전달
+        `http://localhost:8080/cartitem/${productId}?quantity=${quantity}`, // 수량을 쿼리 파라미터로 전달
         {}, // POST 요청의 body는 비워둠
         { withCredentials: true }
       )

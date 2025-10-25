@@ -44,7 +44,7 @@ function EditProduct() {
 
     const fetchProduct = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/products/${productId}`, { withCredentials: true });
+        const res = await axios.get(`http://localhost:8080/products/${productId}`, { withCredentials: true });
         setFormData(res.data);
       } catch (err) {
         setError("상품 정보를 불러오는 중 오류가 발생했습니다.");
@@ -69,7 +69,7 @@ function EditProduct() {
 
     try {
       const response = await axios.put(
-        `${process.env.REACT_APP_API_BASE_URL}/products/${productId}`,
+        `http://localhost:8080/products/${productId}`,
         formData,
         { withCredentials: true }
       );

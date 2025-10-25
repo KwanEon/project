@@ -26,7 +26,7 @@ function SignupPage() {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.REACT_APP_API_BASE_URL}/register`, formData);
+      await axios.post(`http://localhost:8080/register`, formData);
       alert("회원가입이 성공적으로 완료되었습니다! 이메일 인증을 완료해야 로그인할 수 있습니다.");
       navigate("/login");
     } catch (error) {

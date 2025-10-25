@@ -25,7 +25,7 @@ function Cart() {
     // 로그인 상태일 때만 장바구니 조회
     if (userRole !== "ANONYMOUS") {
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/cartitem`, { withCredentials: true })
+        .get(`http://localhost:8080/cartitem`, { withCredentials: true })
         .then((response) => setCartItems(response.data))
         .catch((err) => {
           setError("장바구니를 불러오는 중 오류가 발생했습니다.");
@@ -40,7 +40,7 @@ function Cart() {
 
   const handleQuantityChange = (cartId, operation) => {
     axios
-      .patch(`${process.env.REACT_APP_API_BASE_URL}/cartitem/${cartId}?operation=${operation}`, {}, { withCredentials: true })
+      .patch(`http://localhost:8080/cartitem/${cartId}?operation=${operation}`, {}, { withCredentials: true })
       .then(() => {
         setCartItems((prevItems) =>
           prevItems.map((item) =>
@@ -61,7 +61,7 @@ function Cart() {
 
   const handleRemoveItem = (productId) => {
     axios
-      .delete(`${process.env.REACT_APP_API_BASE_URL}/cartitem/${productId}`, { withCredentials: true })
+      .delete(`http://localhost:8080/cartitem/${productId}`, { withCredentials: true })
       .then(() => {
         setCartItems((prevItems) =>   // 현재 상태(cartItems)를 prevItems라는 이름으로 받아서
           prevItems.filter(
@@ -75,7 +75,7 @@ function Cart() {
 
   const handleClearCart = () => {
     axios
-      .delete(`${process.env.REACT_APP_API_BASE_URL}/cartitem`, { withCredentials: true })
+      .delete(`http://localhost:8080/cartitem`, { withCredentials: true })
       .then(() => setCartItems([]))
       .catch((err) => {
         setError("장바구니를 비우는 중 오류가 발생했습니다.");

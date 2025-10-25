@@ -23,7 +23,7 @@ function CartOrder() {
       }
 
       axios
-        .get(`${process.env.REACT_APP_API_BASE_URL}/cartitem`, { withCredentials: true })
+        .get(`http://localhost:8080/cartitem`, { withCredentials: true })
         .then((response) => setCartItems(response.data))
         .catch((err) => {
           console.error("장바구니를 불러오는 중 오류 발생:", err);
@@ -43,7 +43,7 @@ function CartOrder() {
 
   const handlePayment = () => {
     axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/order/cartitem`, {}, { withCredentials: true })
+      .post(`http://localhost:8080/order/cartitem`, {}, { withCredentials: true })
       .then(() => {
         alert("주문이 정상적으로 완료되었습니다.");
         navigate("/mypage");

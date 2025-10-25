@@ -27,7 +27,7 @@ const MyPage = () => {
     const fetchOrders = async () => {
       if (user !== null && userRole !== "ANONYMOUS") {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/orders`, { withCredentials: true });
+            const response = await axios.get(`http://localhost:8080/auth/orders`, { withCredentials: true });
             setOrders(response.data);
         } catch (error) {
             console.error("Failed to fetch orders:", error);
@@ -39,7 +39,7 @@ const MyPage = () => {
     const fetchAccountInfo = async () => {
       if (user !== null && userRole !== "ANONYMOUS") {
         try {
-            const response = await axios.get(`${process.env.REACT_APP_API_BASE_URL}/auth/user`, { withCredentials: true });
+            const response = await axios.get(`http://localhost:8080/auth/user`, { withCredentials: true });
             setAccountInfo(response.data);
         } catch (error) {
             console.error("Failed to fetch account info:", error);
