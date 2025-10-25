@@ -14,7 +14,6 @@ import jakarta.validation.Valid;
 import com.example.project.model.User;
 import java.util.List;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.validation.FieldError;
 import java.util.HashMap;
 import java.util.Map;
@@ -85,7 +84,7 @@ public class UserController {
   @GetMapping("/auth/user")   // 현재 로그인한 유저 정보 조회
   public ResponseEntity<?> getCurrentUser(@AuthenticationPrincipal CustomUserDetails principal) {
     if (principal == null) {
-        return ResponseEntity.status(401).body("권한이 없습니다.");
+        return ResponseEntity.status(401).body("로그인 하지 않은 사용자입니다.");
     }
     User user = principal.getUser();
     UserDTO dto = new UserDTO(user.getId(), user.getUsername(), user.getName(),
@@ -95,10 +94,10 @@ public class UserController {
 
   @GetMapping("/auth/role")   // 현재 로그인한 유저의 권한 조회
   public ResponseEntity<?> getCurrentUserRole(@AuthenticationPrincipal CustomUserDetails principal) {
-    String role = principal.getAuthorities().stream()
-        .findFirst()
-        .map(GrantedAuthority::getAuthority)
-        .orElse("USER");
+    String role = principal.getAuthorities().isEmpty()
+                  ? "USER"
+                  : principal.getAuthorities().iterator().next().getAuthority();
+
     return ResponseEntity.ok(role);
   }
 
