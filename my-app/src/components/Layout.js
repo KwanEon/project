@@ -11,7 +11,7 @@ function Layout({ children }) {
 
   const handleLogout = () => {
     axios
-      .post(`${process.env.REACT_APP_API_BASE_URL}/auth/logout`, {}, { withCredentials: true })
+      .post(`http://localhost:8080/auth/logout`, {}, { withCredentials: true })
       .then(() => {
         console.log("로그아웃 성공");
         setUser(null);
