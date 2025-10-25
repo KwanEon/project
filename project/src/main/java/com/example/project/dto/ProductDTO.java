@@ -48,4 +48,6 @@ public class ProductDTO {
 
     @Builder.Default
     private final List<ReviewResponseDTO> reviews = new ArrayList<>();
+
+    
 }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.example.project.dto.ProductDTO;
+import com.example.project.dto.ProductListDTO;
 import com.example.project.dto.ReviewResponseDTO;
 import com.example.project.model.Product;
 import com.example.project.model.Product.Category;
@@ -89,6 +90,17 @@ public class ProductService {
                            .map(ReviewResponseDTO::from)
                            .toList()
                 )
+                .build();
+        return dto;
+    }
+
+    public ProductListDTO convertToListDTO(Product product) {   // 상품 리스트용 DTO 변환
+        ProductListDTO dto = ProductListDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .category(product.getCategory())
+                .price(product.getPrice())
+                .stock(product.getStock())
                 .build();
         return dto;
     }

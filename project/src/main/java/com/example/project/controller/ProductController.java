@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import com.example.project.dto.ProductDTO;
+import com.example.project.dto.ProductListDTO;
 import com.example.project.dto.ReviewDTO;
 import com.example.project.model.Product;
 import com.example.project.model.Product.Category;
@@ -27,7 +28,7 @@ public class ProductController {
     private final ReviewRepository reviewRepository;
 
     @GetMapping // 상품 목록 조회
-    public ResponseEntity<Page<ProductDTO>> getProducts(@RequestParam(value = "category", required = false) Category category,
+    public ResponseEntity<Page<ProductListDTO>> getProducts(@RequestParam(value = "category", required = false) Category category,
                                                         @RequestParam(value = "keyword", required = false) String keyword,
                                                         @RequestParam(value = "page", defaultValue = "0") int page) {
         PageRequest pageRequest = PageRequest.of(page, 10);
@@ -42,8 +43,8 @@ public class ProductController {
         } else {
             products = productService.getAllProducts(pageRequest);
         }
-        Page<ProductDTO> productDTOs = products.map(productService::convertToDTO);
-        return ResponseEntity.ok(productDTOs);
+        Page<ProductListDTO> productListDTOs = products.map(productService::convertToListDTO);
+        return ResponseEntity.ok(productListDTOs);
     }
 
     @GetMapping("/{productId}") // 상품 상세 조회
