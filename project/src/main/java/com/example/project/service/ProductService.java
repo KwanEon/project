@@ -25,7 +25,7 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     @Transactional(readOnly = true)
-    public Product getProductById(Long id) {    // 상품 상세 조회
+    public Product getProductById(Long id) {    // 상품 조회
         return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
     }
 
@@ -35,7 +35,7 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public ProductDetailDTO getProductDetail(Long id) {
+    public ProductDetailDTO getProductDetail(Long id) {   // 상품 상세 조회
         Product product = productRepository.findProductDetailById(id).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
 
         return ProductDetailDTO.builder()
