@@ -4,11 +4,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
+
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.example.project.dto.ProductDTO;
 import com.example.project.dto.ProductListDTO;
+import com.example.project.dto.ProductDetailDTO;
 import com.example.project.dto.ReviewResponseDTO;
 import com.example.project.model.Product;
 import com.example.project.model.Product.Category;
@@ -22,12 +26,36 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public Product getProductById(Long id) {    // 상품 상세 조회
-        return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 상품을 찾을 수 없습니다."));
+        return productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
     }
 
     @Transactional(readOnly = true)
     public Page<Product> getAllProducts(Pageable pageable) {    // 모든 상품 조회(페이징)
         return productRepository.findAll(pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public ProductDetailDTO getProductDetail(Long id) {
+        Product product = productRepository.findProductDetailById(id).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+
+        return ProductDetailDTO.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .imageUrl(product.getImageUrl())
+                .description(product.getDescription())
+                .price(product.getPrice())
+                .stock(product.getStock())
+                .category(product.getCategory())
+                .reviews(product.getReviews().stream()
+                        .<ReviewResponseDTO>map(r -> ReviewResponseDTO.builder()
+                                .id(r.getId())
+                                .reviewer(r.getUser().getName())
+                                .reviewText(r.getReviewText())
+                                .rating(r.getRating())
+                                .reviewDate(r.getReviewDate())
+                                .build())
+                        .collect(Collectors.toList()))
+                .build();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -74,24 +102,6 @@ public class ProductService {
     @Transactional(readOnly = true)
     public Page<Product> searchProductsByNameAndCategory(Category category, String keyword, Pageable pageable) {    // 카테고리 + 상품명으로 검색
         return productRepository.findByCategoryAndNameContainingIgnoreCase(category, keyword, pageable);
-    }
-
-    public ProductDTO convertToDTO(Product product) {   // 상품 DTO 변환
-        ProductDTO dto = ProductDTO.builder()
-                .id(product.getId())
-                .name(product.getName())
-                .imageUrl(product.getImageUrl())
-                .description(product.getDescription())
-                .price(product.getPrice())
-                .stock(product.getStock())
-                .category(product.getCategory())
-                .reviews(
-                    product.getReviews().stream()
-                           .map(ReviewResponseDTO::from)
-                           .toList()
-                )
-                .build();
-        return dto;
     }
 
     public ProductListDTO convertToListDTO(Product product) {   // 상품 리스트용 DTO 변환

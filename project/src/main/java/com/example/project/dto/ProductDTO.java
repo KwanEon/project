@@ -7,8 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.example.project.model.Product.Category;
 
@@ -45,9 +43,4 @@ public class ProductDTO {
     @NotNull(message = "카테고리는 필수 입력 항목입니다.")
     @Enumerated(EnumType.STRING)
     private Category category;
-
-    @Builder.Default
-    private final List<ReviewResponseDTO> reviews = new ArrayList<>();
-
-    
 }

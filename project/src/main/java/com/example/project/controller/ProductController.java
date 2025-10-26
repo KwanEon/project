@@ -11,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import com.example.project.dto.ProductDTO;
 import com.example.project.dto.ProductListDTO;
 import com.example.project.dto.ReviewDTO;
+import com.example.project.dto.ProductDetailDTO;
 import com.example.project.model.Product;
 import com.example.project.model.Product.Category;
 import com.example.project.repository.ReviewRepository;
@@ -48,9 +49,8 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}") // 상품 상세 조회
-    public ResponseEntity<ProductDTO> getProduct(@PathVariable("productId") Long productId) {
-        Product product = productService.getProductById(productId);
-        ProductDTO productDTO = productService.convertToDTO(product);
+    public ResponseEntity<ProductDetailDTO> getProduct(@PathVariable("productId") Long productId) {
+        ProductDetailDTO productDTO = productService.getProductDetail(productId);
         return ResponseEntity.ok(productDTO);
     }
 
