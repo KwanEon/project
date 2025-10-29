@@ -6,8 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.util.stream.Collectors;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Collections;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -45,7 +45,7 @@ public class ProductService {
         Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
         Page<Long> reviewIdsPage = reviewRepository.findReviewIdsByProductId(id, pageable);     // 리뷰 ID 페이징 조회
 
-        List<ReviewResponseDTO> reviewsDTO = Collections.emptyList();
+        List<ReviewResponseDTO> reviewsDTO = new ArrayList<>();
         if (!reviewIdsPage.isEmpty()) {
             List<Review> reviews = reviewRepository.findReviewsByIds(reviewIdsPage.getContent());   // 리뷰 ID로 리뷰 조회(Fetch Join)
 
