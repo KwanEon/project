@@ -6,8 +6,10 @@ import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.util.stream.Collectors;
-
+import java.util.List;
+import java.util.Collections;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
 import com.example.project.dto.ProductDTO;
@@ -16,13 +18,17 @@ import com.example.project.dto.ProductDetailDTO;
 import com.example.project.dto.ReviewResponseDTO;
 import com.example.project.model.Product;
 import com.example.project.model.Product.Category;
+import com.example.project.model.Review;
 import com.example.project.repository.ProductRepository;
+import com.example.project.repository.ReviewRepository;
+
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
+    private final ReviewRepository reviewRepository;
 
     @Transactional(readOnly = true)
     public Product getProductById(Long id) {    // 상품 조회
@@ -33,10 +39,22 @@ public class ProductService {
     public Page<Product> getAllProducts(Pageable pageable) {    // 모든 상품 조회(페이징)
         return productRepository.findAll(pageable);
     }
-
+    
     @Transactional(readOnly = true)
-    public ProductDetailDTO getProductDetail(Long id) {   // 상품 상세 조회
-        Product product = productRepository.findProductDetailById(id).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+    public ProductDetailDTO getProductDetail(Long id, Pageable pageable) {   // 상품 상세 조회
+        Product product = productRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("상품을 찾을 수 없습니다."));
+        Page<Long> reviewIdsPage = reviewRepository.findReviewIdsByProductId(id, pageable);     // 리뷰 ID 페이징 조회
+
+        List<ReviewResponseDTO> reviewsDTO = Collections.emptyList();
+        if (!reviewIdsPage.isEmpty()) {
+            List<Review> reviews = reviewRepository.findReviewsByIds(reviewIdsPage.getContent());   // 리뷰 ID로 리뷰 조회(Fetch Join)
+
+            reviewsDTO = reviews.stream()
+                    .map(ReviewResponseDTO::from)   // Review -> ReviewResponseDTO 변환
+                    .collect(Collectors.toList());  // List<ReviewResponseDTO> 생성
+        }
+
+        Page<ReviewResponseDTO> reviewsPage = new PageImpl<>(reviewsDTO, pageable, reviewIdsPage.getTotalElements());   // 리뷰 DTO 페이징 생성
 
         return ProductDetailDTO.builder()
                 .id(product.getId())
@@ -46,15 +64,7 @@ public class ProductService {
                 .price(product.getPrice())
                 .stock(product.getStock())
                 .category(product.getCategory())
-                .reviews(product.getReviews().stream()
-                        .<ReviewResponseDTO>map(r -> ReviewResponseDTO.builder()
-                                .id(r.getId())
-                                .reviewer(r.getUser().getName())
-                                .reviewText(r.getReviewText())
-                                .rating(r.getRating())
-                                .reviewDate(r.getReviewDate())
-                                .build())
-                        .collect(Collectors.toList()))
+                .reviews(reviewsPage)
                 .build();
     }
 

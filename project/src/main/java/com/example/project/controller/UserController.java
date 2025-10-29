@@ -3,6 +3,7 @@ package com.example.project.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.BindingResult;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import com.example.project.service.UserService;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +25,7 @@ public class UserController {
   private final UserRepository userRepository;
   private final UserService userService;
 
-  @PostMapping("/register")
+  @PostMapping("/register")      // 회원가입
   public ResponseEntity<?> Register(@RequestBody @Valid RegisterDTO registerDTO, BindingResult result) {
       if (result.hasErrors()) {
           Map<String, String> fieldErrors = new HashMap<>();    // 필드별 에러 메시지 저장
@@ -39,7 +40,7 @@ public class UserController {
 
       try {
           userService.saveUser(registerDTO);
-          return ResponseEntity.ok("회원가입 성공");
+          return ResponseEntity.status(HttpStatus.CREATED).body("회원가입 성공");
       } catch (Exception e) {
           return ResponseEntity.badRequest().body(Map.of(
               "status", "error",               // 상태 코드

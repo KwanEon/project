@@ -1,6 +1,7 @@
 package com.example.project.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import lombok.RequiredArgsConstructor;
 import com.example.project.dto.CartItemDTO;
@@ -36,7 +37,7 @@ public class OrderController {
             return ResponseEntity.status(401).body("로그인이 필요합니다.");
         }
         cartItemService.addCartItem(principal.getUserId(), productId, quantity);
-        return ResponseEntity.ok("상품이 장바구니에 추가되었습니다.");
+        return ResponseEntity.status(HttpStatus.CREATED).body("상품이 장바구니에 추가되었습니다.");
     }
 
     @PatchMapping("/cartitem/{cartId}") // 장바구니 아이템 수량 변경
@@ -70,7 +71,7 @@ public class OrderController {
     @PostMapping("/order/cartitem") // 장바구니 아이템으로 주문 생성
     public ResponseEntity<?> placeCartOrder(@AuthenticationPrincipal CustomUserDetails principal) {
         Order order = orderService.placeOrder(principal.getUserId());
-        return ResponseEntity.ok(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
     @PostMapping("/order/{productId}")  // 개별 상품 주문 생성
@@ -78,7 +79,7 @@ public class OrderController {
                                             @PathVariable("productId") Long productId,
                                             @RequestParam("quantity") int quantity) {
         Order order = orderService.placeIndividualOrder(principal.getUserId(), productId, quantity);
-        return ResponseEntity.ok(order);
+        return ResponseEntity.status(HttpStatus.CREATED).body(order);
     }
 
     @GetMapping("/auth/orders")   // 현재 로그인한 유저의 주문 목록 조회

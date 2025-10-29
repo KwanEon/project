@@ -1,13 +1,12 @@
 package com.example.project.dto;
 
-import java.util.ArrayList;
-import java.util.List;
 import com.example.project.model.Product.Category;
 import lombok.Builder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 
 @Getter @Setter
 @Builder
@@ -22,6 +21,5 @@ public class ProductDetailDTO {
     private int stock;
     private Category category;
 
-    @Builder.Default
-    private final List<ReviewResponseDTO> reviews = new ArrayList<>();
+    private Page<ReviewResponseDTO> reviews;
 }

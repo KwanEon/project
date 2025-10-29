@@ -49,8 +49,10 @@ public class ProductController {
     }
 
     @GetMapping("/{productId}") // 상품 상세 조회
-    public ResponseEntity<ProductDetailDTO> getProduct(@PathVariable("productId") Long productId) {
-        ProductDetailDTO productDTO = productService.getProductDetail(productId);
+    public ResponseEntity<ProductDetailDTO> getProduct(@PathVariable("productId") Long productId,
+                                                       @RequestParam(value = "page", defaultValue = "0") int pageable) {
+        PageRequest pageRequest = PageRequest.of(pageable, 5);
+        ProductDetailDTO productDTO = productService.getProductDetail(productId, pageRequest);
         return ResponseEntity.ok(productDTO);
     }
 
